@@ -1,0 +1,10 @@
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (1, 'Introducción a sistemas operativos', 101, 'OVA de Sistemas');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (2, 'Métodos numéricos básicos', 102, 'OVA de Matemáticas');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (3, 'Gestión de costos y presupuestos', 103, 'OVA de Contabilidad');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (4, 'Fundamentos de lógica', 104, 'OVA de Discretas');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (5, 'Programación avanzada en C++', 105, 'OVA de Programación');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (6, 'Optimización de recursos en memoria', 106, 'OVA de Memoria');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (7, 'Introducción al diseño modular', 107, 'OVA de Arquitectura');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (8, 'Conceptos básicos de PostgreSQL', 108, 'OVA de Bases de Datos');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (9, 'Fundamentos de Docker y despliegue', 109, 'OVA de Deploy');
+INSERT INTO ovas (id, description, idcurso, nombre) VALUES (10, 'Validación de datos en Spring Boot', 110, 'OVA de Backend');
