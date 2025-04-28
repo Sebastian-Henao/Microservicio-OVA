@@ -44,7 +44,7 @@ public class OvasRestController {
     }
 
     // Listar OVAS con paginacion
-    @GetMapping("/ovas/page/{page}")
+    @GetMapping("/ova/page/{page}")
     public ResponseEntity<Object> index(@PathVariable Integer page){
         Pageable pageable = PageRequest.of(page, 4);
         Page<Ovas> ovas = ovasService.findAll(pageable);
