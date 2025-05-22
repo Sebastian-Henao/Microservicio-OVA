@@ -4,9 +4,12 @@ import com.edu.uceva.ovaservice.domain.exception.NoHayOVASException;
 import com.edu.uceva.ovaservice.domain.exception.OVANoEncontradoException;
 import com.edu.uceva.ovaservice.domain.exception.PaginaSinOVASException;
 import com.edu.uceva.ovaservice.domain.exception.ValidationException;
+import com.edu.uceva.ovaservice.domain.model.CursoDTO;
 import com.edu.uceva.ovaservice.domain.model.Ovas;
+import com.edu.uceva.ovaservice.domain.services.ICursoClient;
 import com.edu.uceva.ovaservice.domain.services.IOvasService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,18 +22,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping("/api/v1/ova-service")
 public class OvasRestController {
     // Declaramos como final el servicio para mejorar la inmutabilidad
     private final IOvasService ovasService;
+    private final ICursoClient cursoClient;
     private static final String MENSAJE = "mensaje";
     private static final String OVA = "ova";
     private static final String OVAS = "ovas";
 
     // Inyeccion de dependencia del servicio que proporciona servicios de CRUD
-    public OvasRestController(IOvasService ovasService) {this.ovasService = ovasService;}
-
+    @Autowired
+    public OvasRestController(IOvasService ovasService, ICursoClient cursoClient) {
+        this.ovasService = ovasService;
+        this.cursoClient = cursoClient;
+    }
     // Listar todos los OVAS
     @GetMapping("/ovas")
     public ResponseEntity<Map<String,Object>> getOvas(){
@@ -62,6 +70,7 @@ public class OvasRestController {
         }
         Map<String, Object> response = new HashMap<>();
         Ovas nuevoOva = ovasService.save(ovas);
+        comprobarCurso(nuevoOva.getIdcurso());
         response.put(MENSAJE, "El OVA ha sido creado con exito");
         response.put(OVA, nuevoOva);
         return  ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -88,6 +97,7 @@ public class OvasRestController {
         if (result.hasErrors()){
             throw new ValidationException(result);
         }
+        comprobarCurso(ovas.getIdcurso());
         ovasService.findById(ovas.getId())
                 .orElseThrow(() -> new OVANoEncontradoException(ovas.getId()));
         Map<String, Object> response = new HashMap<>();
@@ -106,5 +116,15 @@ public class OvasRestController {
         response.put(MENSAJE, "El OVA ha sido encontrado con exito");
         response.put(OVA, ovas);
         return ResponseEntity.ok(response);
+    }
+    // Comprobar si el curso existe
+    public void comprobarCurso(Long idcurso){
+        Map<String, List< CursoDTO>> response = cursoClient.idcurso();
+        List<CursoDTO> cursos = response.get("cursos");
+        boolean existe = cursos.stream()
+                .anyMatch(c -> c.getId() == idcurso);
+        if (!existe){
+            throw new RuntimeException("El curso con id " + idcurso + " no existe");
+        }
     }
 }
