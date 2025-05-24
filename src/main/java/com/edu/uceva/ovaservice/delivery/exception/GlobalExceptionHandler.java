@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OVAExistenteException.class)
     public ResponseEntity<Map<String, Object>> handleOVAExistenteException(OVAExistenteException ex) {
         Map<String, Object> response = new HashMap<>();
-        response.put((ERROR), ex.getMessage());
+        response.put(ERROR, ex.getMessage());
         response.put(STATUS, HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
